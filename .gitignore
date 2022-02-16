@@ -1,0 +1,7 @@
+*.log
+*.zip
+.idea
+vendor
+.vscode
+.phpintel
+node_modules
