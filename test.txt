@@ -8,3 +8,22 @@ $(document).ready(function () {
   
  #Git Commands(Ariful Vai Msoft)
 https://arif98741.github.io/gitcom/
+
+
+# External POST API Integrate in Django 
+
+import requests
+from requests.auth import HTTPBasicAuth
+
+def api(request):
+    Company = request.POST.get('Company')
+    Position = request.POST.get('position')
+
+    url = os.environ.get("URL", 'http://myhost:port/projectname/api/addposition?compName=Google&category=Developer')
+    url = "%s" % (url)
+    body = {"Company" : "%s" % Company, "Position" : "%s" % Position}
+        response = requests.post(url, auth=HTTPBasicAuth('USER', 'PASSWORD'), headers={'Content-Type': 'application/json'}, json=body)
+    if response.status_code == 200:
+        print("Code 200")
+    else:
+        print("Code not 200")
