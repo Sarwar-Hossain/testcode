@@ -27,3 +27,51 @@ def api(request):
         print("Code 200")
     else:
         print("Code not 200")
+
+# Sub Query
+
+SELECT username,
+       email,
+       phoneno,
+       sum_price
+FROM   (SELECT au.username,
+               au.email,
+               au.phoneno,
+               Sum(id) AS sum_price
+        FROM   addusers_users au
+        GROUP  BY au.username,
+                  au.email,
+                  au.phoneno
+        order by Sum(id) desc) AS abc
+WHERE  sum_price < '2000';
+
+
+SELECT a.client_id,
+       b.client_id
+FROM   (SELECT *
+        FROM   addusers_softwarelist as2) AS a,
+       (SELECT *
+        FROM   addusers_users au) AS b
+WHERE  a.client_id = b.client_id;
+
+
+SELECT *
+FROM   (SELECT B.branchname,
+               A.type,
+               Avg (T.amount)     AS [AVG],
+               Count(A.accnumber) AS [COUNT]
+        FROM   branch B,
+               account A,
+               transactions T
+        WHERE  B.branchnumber = A.branchnumber
+               AND A.accnumber = T.accnumber
+        GROUP  BY B.branchname,
+                  A.type) AS T1
+       INNER JOIN (SELECT B1.branchname,
+                          Count(A1.accnumber) AS [COUNT]
+                   FROM   account A1,
+                          branch B1
+                   WHERE  A1.branchnumber = B1.branchnumber
+                   GROUP  BY B1.branchname
+                   HAVING Count(A1.accnumber) > 5) AS T2
+               ON T1.branchname = T2.branchname;
